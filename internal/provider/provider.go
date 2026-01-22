@@ -7,6 +7,7 @@ import (
 	"context"
 
 	"github.com/hashicorp/terraform-plugin-framework/datasource"
+	"github.com/hashicorp/terraform-plugin-framework/ephemeral"
 	"github.com/hashicorp/terraform-plugin-framework/function"
 	"github.com/hashicorp/terraform-plugin-framework/provider"
 	"github.com/hashicorp/terraform-plugin-framework/provider/schema"
@@ -16,6 +17,7 @@ import (
 // Ensure NatsNkeyProvider satisfies various provider interfaces.
 var _ provider.Provider = &NatsNkeyProvider{}
 var _ provider.ProviderWithFunctions = &NatsNkeyProvider{}
+var _ provider.ProviderWithEphemeralResources = &NatsNkeyProvider{}
 
 // NatsNkeyProvider defines the provider implementation.
 type NatsNkeyProvider struct {
@@ -61,6 +63,12 @@ func (p *NatsNkeyProvider) DataSources(ctx context.Context) []func() datasource.
 
 func (p *NatsNkeyProvider) Functions(ctx context.Context) []func() function.Function {
 	return []func() function.Function{}
+}
+
+func (p *NatsNkeyProvider) EphemeralResources(ctx context.Context) []func() ephemeral.EphemeralResource {
+	return []func() ephemeral.EphemeralResource{
+		NewNkeyEphemeral,
+	}
 }
 
 func New(version string) func() provider.Provider {
